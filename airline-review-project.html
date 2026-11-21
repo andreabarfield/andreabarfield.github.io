@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airline Review Analysis Using Natural Language Processing | Andrea Barfield</title>
+<style>
+:root{--navy:#18213d;--purple:#6545d8;--purple-light:#f0edff;--text:#30374c;--muted:#697186;--border:#e8e7f0;--soft-blue:#eef4fb;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
+.container{width:min(1050px,calc(100% - 48px));margin:0 auto}
+.site-header{padding:24px 0;border-bottom:1px solid var(--border)}
+.navigation{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{color:var(--navy);font-size:1.1rem;font-weight:800;letter-spacing:.04em;text-decoration:none;white-space:nowrap}
+.nav-links{display:flex;align-items:center;gap:26px;flex-wrap:wrap}.nav-links a{color:var(--text);text-decoration:none;font-weight:600;font-size:.94rem}.nav-links a:hover{color:var(--purple)}
+.nav-links .contact-link{background:var(--purple);color:white;padding:10px 17px;border-radius:999px}
+.hero{padding:66px 0 44px}.eyebrow{color:var(--purple);font-weight:750;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem}
+h1,h2,h3{color:var(--navy);line-height:1.2}h1{font-size:clamp(2.1rem,5vw,3.35rem);max-width:850px;margin:14px 0}h2{font-size:1.75rem;margin:0 0 18px}h3{font-size:1.12rem;margin:0 0 8px}
+.lead{font-size:1.15rem;color:var(--muted);max-width:820px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.pill{display:inline-block;background:var(--purple-light);color:#5135b8;border-radius:999px;padding:6px 12px;font-size:.82rem;font-weight:700}.team{background:var(--soft-blue);color:#42516d}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0}.stat{border:1px solid var(--border);border-radius:16px;padding:20px;background:#fff}.stat strong{display:block;color:var(--navy);font-size:1.8rem;line-height:1.2}.stat span{color:var(--muted);font-size:.9rem}
+section{padding:34px 0;border-top:1px solid var(--border)}.section-intro{color:var(--muted);max-width:800px;margin-top:-6px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.panel{border:1px solid var(--border);border-radius:16px;padding:22px;background:#fff}.panel p{margin:7px 0 0}.number{color:var(--purple);font-weight:800;font-size:.78rem;letter-spacing:.1em}
+ul{padding-left:21px}li{margin:7px 0}.highlight{background:var(--soft-blue);border-radius:16px;padding:22px;margin:18px 0}.topic-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.topic{background:var(--purple-light);padding:14px 16px;border-radius:12px;color:#40316f;font-weight:650}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.button{display:inline-block;text-decoration:none;padding:12px 18px;border-radius:999px;font-weight:750}.primary{background:var(--purple);color:#fff}.secondary{border:1px solid var(--border);color:var(--navy)}
+footer{padding:35px 0;color:var(--muted);font-size:.9rem;border-top:1px solid var(--border)}
+@media(max-width:650px){.navigation{align-items:flex-start;flex-direction:column}.nav-links{gap:14px}.stats,.grid,.topic-list{grid-template-columns:1fr}.hero{padding:46px 0 32px}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container navigation">
+<a class="brand" href="/index.html">ANDREA BARFIELD</a>
+<nav class="nav-links" aria-label="Main navigation">
+<a href="/index.html">Home</a><a href="/index.html#projects">Projects</a><a href="/about.html">About</a><a class="contact-link" href="/contact.html">Get in touch</a>
+</nav></div></header>
+<main>
+<div class="container">
+<header class="hero">
+<div class="eyebrow">Independent project · DSC 360 Term Project</div>
+<h1>Airline Review Analysis Using Natural Language Processing</h1>
+<p class="lead">Identifying passenger sentiment and recurring themes in negative airline reviews using text preparation, sentiment analysis, and unsupervised topic clustering.</p>
+<div class="meta"><span class="pill">Independent Project</span><span class="pill">Natural Language Processing</span><span class="pill">Python</span></div>
+<div class="stats">
+<div class="stat"><strong>93,686</strong><span>Cleaned passenger reviews</span></div>
+<div class="stat"><strong>48,654</strong><span>Reviews classified as negative</span></div>
+<div class="stat"><strong>5</strong><span>Recurring complaint themes</span></div>
+</div>
+</header>
+
+<section>
+<div class="eyebrow">01 / Project overview</div><h2>Project objectives and analytical approach</h2>
+<p class="section-intro">The project organizes unstructured passenger reviews into interpretable patterns. The analysis combines two review datasets, examines sentiment, and groups negative reviews into recurring complaint themes.</p>
+<div class="grid">
+<article class="panel"><div class="number">01 · PREPARE THE CORPUS</div><h3>Clean and standardize review data</h3><p>Combined two review datasets, standardized fields, removed records without review text and duplicate reviews, converted review dates, and normalized the text.</p></article>
+<article class="panel"><div class="number">02 · REPRESENT THE LANGUAGE</div><h3>Convert text into numerical features</h3><p>Applied Bag of Words, bigrams, and TF-IDF to represent review text for analysis.</p></article>
+<article class="panel"><div class="number">03 · EXAMINE SENTIMENT</div><h3>Identify negative reviews</h3><p>Used VADER, a lexicon- and rules-based approach, to classify sentiment and focus complaint analysis on negative reviews.</p></article>
+<article class="panel"><div class="number">04 · DISCOVER COMPLAINT THEMES</div><h3>Cluster recurring topics</h3><p>Applied MiniBatch K-Means to group negative reviews, then interpreted cluster terms and example reviews and evaluated similarity.</p></article>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">02 / Data and preparation</div><h2>Building the review corpus</h2>
+<p class="section-intro">The combined dataset was prepared before sentiment scoring and clustering.</p>
+<div class="stats">
+<div class="stat"><strong>93,928</strong><span>Initial records</span></div>
+<div class="stat"><strong>147</strong><span>Missing review texts removed</span></div>
+<div class="stat"><strong>95</strong><span>Duplicate reviews removed</span></div>
+</div>
+<div class="highlight"><strong>Final analysis corpus: 93,686 reviews.</strong><br>Original review text was retained for VADER to preserve punctuation and capitalization cues. The two source datasets contained no overlapping review texts in the initial duplicate check.</div>
+</section>
+
+<section>
+<div class="eyebrow">03 / Sentiment analysis</div><h2>Negative sentiment was the largest category</h2>
+<p class="section-intro">VADER sentiment classification was used as a screening step to identify reviews for deeper complaint analysis.</p>
+<div class="grid">
+<div class="panel"><h3>Sentiment distribution</h3><p><strong>51.93%</strong> Negative<br><strong>46.18%</strong> Positive<br><strong>1.89%</strong> Neutral</p></div>
+<div class="panel"><h3>Negative review subset</h3><p><strong style="font-size:2rem;color:var(--navy)">48,654</strong><br>reviews classified as negative.</p></div>
+</div>
+<p class="section-intro">These classifications are not verified measures of a passenger's full experience or intent. Sarcasm, mixed experiences, context, and airline-specific language may affect automated sentiment scoring.</p>
+</section>
+
+<section>
+<div class="eyebrow">04 / Language patterns</div><h2>Frequent phrases pointed to operational pain points</h2>
+<p class="section-intro">Word and bigram frequencies surfaced recurring language in negative reviews. Counts represent phrase occurrences, not unique reviews; a review may contain a phrase more than once.</p>
+<div class="grid">
+<div class="panel"><h3>Frequent phrases</h3><ul><li>Customer service — 15,232</li><li>Flight delay — 8,252</li><li>Connect flight — 6,003</li><li>Flight attendant — 5,434</li><li>Flight cancel — 5,259</li></ul></div>
+<div class="panel"><h3>Text representation</h3><ul><li>1,000 Bag of Words features</li><li>1,000 bigram features</li><li>5,000 TF-IDF features</li></ul><p>These representations converted text into numerical features for analysis.</p></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">05 / Topic clustering</div><h2>Five recurring complaint themes</h2>
+<p class="section-intro">TF-IDF represented the 48,654 negative reviews; MiniBatch K-Means grouped them into five clusters. The labels below are interpretations of recurring language in each group.</p>
+<div class="topic-list">
+<div class="topic">Cancellations and Refunds<br><strong>6,720 · 13.81%</strong></div>
+<div class="topic">Customer Service and Communication<br><strong>13,520 · 27.79%</strong></div>
+<div class="topic">Onboard Experience<br><strong>10,661 · 21.91%</strong></div>
+<div class="topic">Baggage and Additional Fees<br><strong>5,848 · 12.02%</strong></div>
+<div class="topic">Flight Delays and Connections<br><strong>11,905 · 24.47%</strong></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">06 / Cluster evaluation</div><h2>Similarity supported useful—but overlapping—groups</h2>
+<p class="section-intro">Cosine similarity compared TF-IDF vectors using samples of up to 500 reviews per cluster.</p>
+<div class="grid">
+<div class="panel"><h3>Highest within-cluster similarity</h3><p>Cluster 3 · Baggage and Additional Fees</p><strong>0.0752</strong><p>Most consistent language within a cluster.</p></div>
+<div class="panel"><h3>Lowest within-cluster similarity</h3><p>Cluster 1 · Customer Service and Communication</p><strong>0.0358</strong><p>Greatest language variation.</p></div>
+<div class="panel"><h3>Greatest between-cluster similarity</h3><p>Clusters 0 and 4 · Cancellations/Refunds and Delays/Connections</p><strong>0.0519</strong><p>Related disruption themes.</p></div>
+<div class="panel"><h3>Lowest between-cluster similarity</h3><p>Clusters 1 and 2 · Customer Service and Onboard Experience</p><strong>0.0288</strong><p>Comparatively distinct language.</p></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">07 / Conclusion and recommendations</div><h2>From passenger language to actionable insight</h2>
+<p>The project prepared a combined review corpus, represented text numerically, identified sentiment patterns, and organized negative reviews into five interpretable themes. The findings show how NLP can make large volumes of unstructured feedback easier to explore. They describe this review corpus—not all passengers or all airline experiences.</p>
+<div class="grid">
+<div class="panel"><h3>Improve disruption communication</h3><p>Provide timely updates and clear rebooking options.</p></div>
+<div class="panel"><h3>Strengthen customer support</h3><p>Make assistance accessible when travel plans change.</p></div>
+<div class="panel"><h3>Clarify baggage and fees</h3><p>Explain policies and charges before purchase.</p></div>
+<div class="panel"><h3>Simplify refunds</h3><p>Make refund and rebooking processes easier to navigate.</p></div>
+<div class="panel"><h3>Review onboard feedback</h3><p>Use passenger comments to identify service improvements.</p></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">08 / Ethical considerations</div><h2>Responsible interpretation of review data</h2>
+<p>Publicly available review text still requires careful consideration of representation, meaning, provenance, privacy, and downstream use. The project materials do not establish the original datasets' collection procedures, consent terms, or privacy protections. Cluster labels are interpretations of word patterns—not verified complaint categories—and results should not be used to rank airlines without accounting for selection bias, review volume, and context.</p>
+<div class="highlight"><strong>Key limitation:</strong> The corpus represents people who chose to submit reviews to the two source datasets. It does not necessarily represent every passenger, airline, language, or travel experience. Model outputs should support further investigation, not replace contextual judgment.</div>
+</section>
+
+<section>
+<div class="eyebrow">09 / Project presentation</div><h2>Explore the final presentation</h2>
+<p class="section-intro">The presentation summarizes the data preparation, sentiment analysis, topic clusters, evaluation, and ethical considerations.</p>
+<div class="actions">
+<a class="button primary" href="/files/airline-review-sentiment-and-clustering-presentation.pptx" target="_blank" rel="noopener">View presentation</a>
+<a class="button secondary" href="/files/airline-review-sentiment-and-clustering-presentation.pptx" download>Download PowerPoint</a>
+</div>
+<p class="section-intro" style="margin-top:14px">The presentation is provided without an audio recording at this time.</p>
+</section>
+</div>
+</main>
+<footer><div class="container">Andrea Barfield · Data Science Portfolio</div></footer>
+</body></html>
