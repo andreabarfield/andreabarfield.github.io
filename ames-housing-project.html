@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ames Housing Price Predictor | Andrea Barfield</title>
+  <style>
+    :root {
+      --navy: #18213d;
+      --purple: #6545d8;
+      --purple-light: #f0edff;
+      --text: #30374c;
+      --muted: #697186;
+      --border: #e8e7f0;
+      --soft-blue: #eef4fb;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.65;
+    }
+    a { color: var(--purple); }
+    .container { width: min(1050px, calc(100% - 48px)); margin: 0 auto; }
+    .site-header { border-bottom: 1px solid var(--border); background: #fff; }
+    .navigation {
+      min-height: 76px; display: flex; align-items: center;
+      justify-content: space-between; gap: 24px;
+    }
+    .brand { color: var(--navy); text-decoration: none; font-weight: 800; letter-spacing: .08em; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: .95rem; font-weight: 600; }
+    .nav-links .contact-link {
+      color: #fff; background: var(--purple); padding: 10px 17px;
+      border-radius: 8px;
+    }
+    .hero { padding: 76px 0 62px; background: linear-gradient(135deg, var(--soft-blue), #f7f5ff); }
+    .eyebrow { color: var(--purple); font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { color: var(--navy); font-size: clamp(2.25rem, 5vw, 3.7rem); line-height: 1.1; margin: 14px 0 18px; max-width: 780px; }
+    .hero p { max-width: 720px; font-size: 1.15rem; color: var(--muted); margin: 0; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .pill { background: #fff; border: 1px solid var(--border); color: var(--navy); border-radius: 999px; padding: 7px 13px; font-size: .84rem; font-weight: 650; }
+    main { padding: 54px 0 80px; }
+    section { margin: 0 0 54px; }
+    h2 { color: var(--navy); font-size: 1.65rem; line-height: 1.25; margin: 0 0 16px; }
+    h3 { color: var(--navy); font-size: 1.08rem; margin: 0 0 8px; }
+    p { margin: 0 0 14px; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { border: 1px solid var(--border); border-radius: 14px; padding: 22px; background: #fff; }
+    .metric { color: var(--purple); font-size: 1.7rem; font-weight: 800; line-height: 1.2; margin-bottom: 5px; }
+    .metric-label { color: var(--muted); font-size: .9rem; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    .step-num { color: var(--purple); font-size: .8rem; font-weight: 800; letter-spacing: .08em; margin-bottom: 8px; }
+    .callout { background: var(--purple-light); border-radius: 14px; padding: 24px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 570px; }
+    th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--border); }
+    th { color: var(--navy); background: #f8f7fc; font-size: .9rem; }
+    tr:last-child td { border-bottom: 0; }
+    .selected { background: #f6f3ff; font-weight: 700; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; }
+    .button { display: inline-block; padding: 12px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; }
+    .button.primary { color: #fff; background: var(--purple); }
+    .button.secondary { color: var(--purple); border: 1px solid var(--purple); background: #fff; }
+    .footer { border-top: 1px solid var(--border); padding: 26px 0; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 650px) {
+      .navigation { align-items: flex-start; flex-direction: column; padding: 18px 0; }
+      .nav-links { flex-wrap: wrap; gap: 14px 20px; }
+      .grid, .steps { grid-template-columns: 1fr; }
+      .hero { padding: 54px 0 46px; }
+      main { padding-top: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navigation">
+      <a class="brand" href="/">ANDREA BARFIELD</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/#projects">Projects</a>
+        <a href="/about.html">About</a>
+        <a class="contact-link" href="/contact.html">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="container">
+      <div class="eyebrow">Independent project · Predictive analytics</div>
+      <h1>Ames Housing Price Predictor</h1>
+      <p>Turning property characteristics into an estimated sale price with an interactive Streamlit application powered by a Random Forest model.</p>
+      <div class="meta">
+        <span class="pill">Python</span>
+        <span class="pill">Pandas</span>
+        <span class="pill">Random Forest</span>
+        <span class="pill">Feature Selection</span>
+        <span class="pill">Streamlit</span>
+        <span class="pill">Model Evaluation</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section>
+      <h2>Project overview</h2>
+      <p>This project developed a house-price prediction application for the Ames, Iowa community using historical home-sales data. Users provide property characteristics such as quality, size, age, basement, and garage features. The application converts those selections into the encoded inputs expected by a trained Random Forest model and returns an estimated sale price.</p>
+      <p>The goal was to make the model easier to use by reducing the number of required inputs while preserving as much predictive performance as possible.</p>
+    </section>
+
+    <section>
+      <h2>From property details to a prediction</h2>
+      <div class="steps">
+        <div class="card">
+          <div class="step-num">01 / INPUT</div>
+          <h3>Describe the property</h3>
+          <p class="muted">Enter property details through sliders, numeric fields, and dropdown selections.</p>
+        </div>
+        <div class="card">
+          <div class="step-num">02 / PREPARE</div>
+          <h3>Prepare model inputs</h3>
+          <p class="muted">Map the selected values to the encoded format expected by the trained model.</p>
+        </div>
+        <div class="card">
+          <div class="step-num">03 / PREDICT</div>
+          <h3>Generate an estimate</h3>
+          <p class="muted">Use the saved Random Forest model to return a predicted sale price.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Model selection</h2>
+      <p>Three Random Forest feature sets were evaluated using the same held-out test split. The 20-feature model was selected for the application because it substantially reduced the number of inputs compared with the original model while retaining similar performance.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Feature set</th><th>MAE</th><th>RMSE</th><th>R²</th></tr></thead>
+          <tbody>
+            <tr><td>126 features · Original model</td><td>$15,981.20</td><td>$27,018.36</td><td>0.9090</td></tr>
+            <tr><td>10 features · Simplified model</td><td>$16,992.03</td><td>$29,134.91</td><td>0.8941</td></tr>
+            <tr class="selected"><td>20 features · Selected app model</td><td>$16,090.37</td><td>$27,404.93</td><td>0.9063</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Model performance</h2>
+      <div class="grid">
+        <div class="card"><div class="metric">$16,090</div><div class="metric-label">Mean absolute error (MAE)</div></div>
+        <div class="card"><div class="metric">$27,405</div><div class="metric-label">Root mean squared error (RMSE)</div></div>
+        <div class="card"><div class="metric">0.9063</div><div class="metric-label">R² · 90.6% of test-set sale-price variation explained</div></div>
+      </div>
+      <p class="muted" style="margin-top:16px;">On the held-out test set, predictions had an average absolute error of about $16,090. These metrics describe performance across the test set; they do not guarantee the accuracy of an individual estimate.</p>
+    </section>
+
+    <section>
+      <h2>Process and reflection</h2>
+      <p>The project followed the CRISP-DM process: business understanding, data understanding, data preparation, modeling, evaluation, and deployment. Comparing multiple feature sets reinforced the importance of evaluating trade-offs rather than choosing a model based on a single metric.</p>
+      <div class="callout">
+        <h3>Next steps</h3>
+        <p>Future improvements include testing the model with newer housing data, assessing performance as market conditions change, adding input validation, incorporating user feedback, and monitoring the model for potential retraining needs. The application would also need to be deployed online for public use.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Project presentation</h2>
+      <p>The presentation includes the application interface, input workflow, prediction output, model comparisons, evaluation metrics, and project reflection.</p>
+      <div class="actions">
+        <a class="button primary" href="/files/ames-housing-presentation.pptx">View project presentation</a>
+        <a class="button secondary" href="/#projects">Back to all projects</a>
+      </div>
+      <p class="muted" style="font-size:.88rem; margin-top:12px;">The presentation link will work after the PowerPoint file is uploaded to the site's <code>files</code> folder using the filename <code>ames-housing-presentation.pptx</code>.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© 2026 Andrea Barfield · Data Science Portfolio</div>
+  </footer>
+</body>
+</html>
