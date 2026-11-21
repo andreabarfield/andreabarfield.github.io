@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Collaborative data science project analyzing and forecasting dry recycling collection share across New York City's 59 community districts.">
+  <title>Community Characteristics and Recycling Performance | Andrea Barfield</title>
+  <style>
+    :root {
+      --navy: #18213d;
+      --purple: #6545d8;
+      --purple-light: #f0edff;
+      --text: #30374c;
+      --muted: #697186;
+      --border: #e8e7f0;
+      --soft-blue: #eef4fb;
+      --white: #ffffff;
+      --page: #fbfbfd;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--page); color: var(--text); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.7; }
+    a { color: var(--purple); }
+    .container { width: min(1050px, calc(100% - 48px)); margin: 0 auto; }
+    .site-header { padding: 24px 0; border-bottom: 1px solid var(--border); background: var(--white); }
+    .navigation { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { color: var(--navy); font-size: 1.1rem; font-weight: 800; letter-spacing: .04em; text-decoration: none; white-space: nowrap; }
+    .nav-links { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: .94rem; font-weight: 600; }
+    .nav-links a:hover { color: var(--purple); }
+    .nav-links .contact-link { color: white; background: var(--purple); padding: 10px 18px; border-radius: 999px; }
+    .nav-links .contact-link:hover { color: white; background: #5134bd; }
+    .hero { padding: 76px 0 64px; background: linear-gradient(135deg, #f4f1ff 0%, #f7f9fd 58%, #eef4fb 100%); }
+    .eyebrow { color: var(--purple); text-transform: uppercase; letter-spacing: .13em; font-size: .76rem; font-weight: 800; margin: 0 0 14px; }
+    h1, h2, h3 { color: var(--navy); line-height: 1.2; }
+    h1 { max-width: 900px; font-size: clamp(2.1rem, 5vw, 3.45rem); letter-spacing: -.045em; margin: 0 0 20px; }
+    .hero-copy { max-width: 800px; color: #515b73; font-size: 1.12rem; margin: 0 0 26px; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 22px; }
+    .pill { display: inline-flex; align-items: center; padding: 7px 13px; border-radius: 999px; background: white; border: 1px solid var(--border); color: var(--text); font-size: .84rem; font-weight: 650; }
+    .pill.team { color: #4f38b7; background: var(--purple-light); border-color: #ded7ff; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .button { display: inline-block; text-decoration: none; font-weight: 700; padding: 12px 19px; border-radius: 999px; border: 1px solid var(--purple); }
+    .button.primary { background: var(--purple); color: white; }
+    .button.secondary { background: white; color: var(--purple); }
+    main { padding: 58px 0 80px; }
+    section { margin: 0 0 58px; }
+    .section-kicker { color: var(--purple); text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; font-weight: 800; margin: 0 0 9px; }
+    h2 { font-size: clamp(1.65rem, 3vw, 2.2rem); margin: 0 0 18px; letter-spacing: -.025em; }
+    h3 { font-size: 1.08rem; margin: 0 0 9px; }
+    p { margin: 0 0 15px; }
+    .lead { max-width: 880px; font-size: 1.08rem; color: #4e5870; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card { background: white; border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: 0 8px 26px rgba(24, 33, 61, .035); }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+    .stat { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+    .stat strong { display: block; color: var(--purple); font-size: 1.7rem; line-height: 1.2; margin-bottom: 7px; }
+    .stat span { color: var(--muted); font-size: .84rem; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+    .tag { background: var(--soft-blue); color: #394761; border-radius: 8px; padding: 7px 11px; font-size: .84rem; font-weight: 650; }
+    .result-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 18px; }
+    .result-table th, .result-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    .result-table th { background: #f5f3ff; color: var(--navy); font-size: .88rem; }
+    .result-table tr:last-child td { border-bottom: 0; }
+    .note { background: #f5f3ff; border-left: 4px solid var(--purple); padding: 18px 20px; border-radius: 0 12px 12px 0; color: #454d65; }
+    .resource-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .resource-links a { display: inline-block; padding: 11px 15px; border: 1px solid var(--border); border-radius: 11px; background: white; text-decoration: none; font-weight: 650; }
+    .resource-links a:hover { border-color: var(--purple); }
+    .presentation-frame { width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 18px; background: #eef1f7; box-shadow: 0 12px 34px rgba(24,33,61,.08); }
+    .presentation-frame iframe { width: 100%; height: 100%; border: 0; border-radius: 18px; }
+    .site-footer { border-top: 1px solid var(--border); padding: 28px 0; background: white; color: var(--muted); font-size: .88rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    @media (max-width: 760px) {
+      .navigation { align-items: flex-start; flex-direction: column; }
+      .nav-links { gap: 16px; }
+      .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 54px 0 48px; }
+    }
+    @media (max-width: 480px) {
+      .container { width: min(100% - 32px, 1050px); }
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: .88rem; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .stat { padding: 15px; }
+      .stat strong { font-size: 1.4rem; }
+      .result-table th, .result-table td { padding: 11px 9px; font-size: .85rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navigation">
+      <a class="brand" href="/index.html">ANDREA BARFIELD</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/index.html">Home</a>
+        <a href="/index.html#projects">Projects</a>
+        <a href="/about.html">About</a>
+        <a class="contact-link" href="/contact.html">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="container">
+      <p class="eyebrow">Data science · Geographic analysis · Forecasting</p>
+      <h1>Community Characteristics and Recycling Performance</h1>
+      <p class="hero-copy">Analyzing and predicting dry recycling collection share across New York City's 59 community districts. This collaborative project examines geographic differences, community-level associations, high-risk district identification, and forecasting performance.</p>
+      <div class="project-meta">
+        <span class="pill team">Collaborative team project</span>
+        <span class="pill">DSC 450 · Project 3</span>
+        <span class="pill">Fall 2026</span>
+        <span class="pill">New York City · 59 community districts</span>
+      </div>
+      <div class="hero-actions">
+        <a class="button primary" href="#presentation">View presentation</a>
+        <a class="button secondary" href="#results">Explore findings</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section>
+      <p class="section-kicker">Project overview</p>
+      <h2>Understanding differences in dry recycling collection share across NYC</h2>
+      <p class="lead">The team examined how dry recycling collection share varies across New York City's 59 community districts, which community characteristics are associated with those differences, how well community characteristics identify lower-share districts, and whether historical patterns can predict future collection share.</p>
+      <div class="grid" style="margin-top:22px">
+        <article class="card">
+          <h3>Business problem</h3>
+          <p>Dry recycling collection share varies considerably across NYC community districts. Citywide averages can hide local differences, but a lower share does not automatically mean residents recycle less. Refuse volume, housing conditions, composting participation, and collection practices can also affect the measure. The analysis was designed to help identify patterns and guide further investigation without unfairly labeling communities.</p>
+        </article>
+        <article class="card">
+          <h3>Research questions</h3>
+          <p><strong>RQ1:</strong> How does recycling collection share vary across NYC's 59 community districts and five boroughs?</p>
+          <p><strong>RQ2:</strong> Which community characteristics are associated with lower recycling collection share?</p>
+          <p><strong>RQ3:</strong> To what extent can community characteristics explain differences and help identify high-risk districts?</p>
+          <p><strong>RQ4:</strong> How accurately can monthly collection share be forecast one year ahead using historical trends and community characteristics?</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-kicker">Data & measurement</p>
+      <h2>Combining district-level collection data with community indicators</h2>
+      <div class="stat-grid">
+        <div class="stat"><strong>59</strong><span>NYC community districts</span></div>
+        <div class="stat"><strong>15,458</strong><span>District-month records in the historical dataset</span></div>
+        <div class="stat"><strong>262</strong><span>Monthly periods · January 2005–October 2026</span></div>
+        <div class="stat"><strong>5</strong><span>Community characteristics examined</span></div>
+      </div>
+      <div class="grid" style="margin-top:20px">
+        <article class="card">
+          <h3>Data sources and preparation</h3>
+          <p>The project used NYC Department of Sanitation (DSNY) monthly tonnage data, NYC Planning American Community Survey estimates, limited-English-proficiency indicators from the NYC Civic Engagement Commission, and housing indicators from the NYU Furman Center.</p>
+          <p>The team checked missing records, duplicate keys, and completeness. Missing data was not treated as zero. Geographic boundaries and reporting periods differed across sources, so source alignment and limitations were documented before combining indicators.</p>
+        </article>
+        <article class="card">
+          <h3>Defining the outcome</h3>
+          <p><strong>Dry recycling collection share (%)</strong> = 100 × (Paper + MGP) / (Refuse + Paper + MGP), where MGP represents metal, glass, and plastic.</p>
+          <p>Annual district shares were calculated from summed annual tonnage, not by averaging monthly percentages. Organics were excluded from the dry recycling numerator and denominator.</p>
+        </article>
+      </div>
+      <div class="note" style="margin-top:20px"><strong>Important measurement distinction:</strong> Dry recycling collection share is a collection-based indicator. It is not the full waste-diversion rate and does not directly measure how much collected material is ultimately recycled or recovered.</div>
+    </section>
+
+    <section>
+      <p class="section-kicker">Analysis & modeling</p>
+      <h2>Four research questions, using descriptive analysis and predictive models</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>RQ1 · Geographic differences</h3>
+          <p>District rankings and tonnage-weighted borough comparisons were used to examine variation in 2025 dry recycling collection share across the city.</p>
+        </article>
+        <article class="card">
+          <h3>RQ2 · Community characteristics</h3>
+          <p>Linear regression, ridge regression, and random forest models examined relationships between collection share and five indicators: limited English proficiency, rent-stabilized housing share, NYCHA share, new residential permits per 1,000 residents, and median household income.</p>
+        </article>
+        <article class="card">
+          <h3>RQ3 · High-risk district identification</h3>
+          <p>Logistic regression and random forest classification ranked districts by predicted risk. The top 15 were compared with the 15 districts with the lowest collection shares in the prior year.</p>
+        </article>
+        <article class="card">
+          <h3>RQ4 · Forecasting</h3>
+          <p>Historical monthly data was used to compare ridge regression and gradient boosting for one-month-ahead forecasts, plus gradient boosting, an averaged ensemble, and a Temporal Fusion Transformer (TFT) for year-ahead forecasting.</p>
+        </article>
+      </div>
+      <div class="note" style="margin-top:20px"><strong>Forecast evaluation:</strong> Models were trained on 2007–2023 data, tuned on 2024, and tested on January 2025 through October 2026 for the monthly forecasting analysis. Year-ahead models forecast 2025 from a December 2024 origin. Forecast errors were compared with a seasonal naïve baseline.</div>
+    </section>
+
+    <section id="results">
+      <p class="section-kicker">Results & findings</p>
+      <h2>What the team found</h2>
+      <div class="stat-grid">
+        <div class="stat"><strong>5.1%–28.4%</strong><span>2025 district collection-share range</span></div>
+        <div class="stat"><strong>16.9%</strong><span>2025 citywide collection share</span></div>
+        <div class="stat"><strong>43%</strong><span>Less prediction error for income-only model vs. average-share baseline</span></div>
+        <div class="stat"><strong>14 of 15</strong><span>Lowest-share districts carried over from prior year</span></div>
+      </div>
+      <div class="grid" style="margin-top:20px">
+        <article class="card">
+          <h3>RQ1 · Geographic variation</h3>
+          <p>District collection share ranged from 5.1% in Bronx Community District 2 to 28.4% in Brooklyn Community District 6. Borough-level shares ranged from 13.1% in the Bronx to 19.5% in Staten Island. Most variation occurred within boroughs rather than between them.</p>
+        </article>
+        <article class="card">
+          <h3>RQ2 · Income was the strongest associated characteristic</h3>
+          <p>Median household income was the strongest community characteristic associated with collection share. In the full regression model, R² was 0.68, and a one-standard-deviation increase in income was associated with approximately 4.8 percentage points higher collection share (95% CI: 3.7 to 6.0). The other four characteristics were uncertain after accounting for income.</p>
+        </article>
+        <article class="card">
+          <h3>RQ3 · Historical performance identified low-share districts best</h3>
+          <p>The prior year's 15 lowest-share districts included 14 of the current year's 15 lowest-share districts. Logistic regression identified 11, and random forest identified 10. Historical collection patterns were the strongest signal for identifying persistently low-share districts.</p>
+        </article>
+        <article class="card">
+          <h3>RQ4 · Forecasting results depended on the horizon</h3>
+          <p>For one-month-ahead forecasts, ridge regression and gradient boosting achieved an MAE of about 0.75 percentage points, approximately 20% lower than the seasonal naïve baseline of 0.95. For year-ahead forecasting, gradient boosting with community characteristics achieved the best MAE at 0.87 points, a modest improvement over the 0.91-point baseline.</p>
+        </article>
+      </div>
+      <h3 style="margin-top:26px">Year-ahead model comparison</h3>
+      <table class="result-table">
+        <thead><tr><th>Model</th><th>Mean Absolute Error (percentage points)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Gradient boosting + community characteristics</strong></td><td><strong>0.87</strong></td></tr>
+          <tr><td>Averaged ensemble</td><td>0.89</td></tr>
+          <tr><td>Seasonal naïve baseline</td><td>0.91</td></tr>
+          <tr><td>Temporal Fusion Transformer (TFT)</td><td>1.01</td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="margin-top:20px"><strong>Interpreting the 2025 forecast gap:</strong> Beginning in April 2025, actual collection shares were about one percentage point higher than forecasts. This coincided with the start of mandatory curbside composting enforcement. From April–October 2025 compared with the same months in 2024, compost collection increased 158% and refuse collection decreased 3.7%. The decrease in refuse alone accounts for about half of the one-point increase in collection share. This illustrates how program and collection changes can shift the measure.</div>
+    </section>
+
+    <section>
+      <p class="section-kicker">My role & contributions</p>
+      <h2>Collaborative project with a focus on visualization</h2>
+      <div class="card">
+        <p>This was a collaborative team project completed with Matthew Scarpello and Sarah Parsons. My assigned primary responsibility was visualization. I contributed to communicating the team's analysis and findings through the project's visual presentation of district-level differences, community-characteristic relationships, model comparisons, and forecasting results.</p>
+        <p><strong>Team responsibilities documented in the project report:</strong> Matthew Scarpello — data wrangling; Sarah Parsons — modeling; Andrea Barfield — visualization.</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-kicker">Limitations & responsible interpretation</p>
+      <h2>Use the findings to guide questions—not assign blame</h2>
+      <p>The relationships are observational and do not establish causation or explain individual resident behavior. Community indicators use different geographic proxies and reporting periods, which introduces uncertainty. A lower dry recycling collection share should not be interpreted as proof that residents recycle less responsibly.</p>
+      <p>Collection share can change when refuse tonnage changes, even if the amount of dry recycling remains the same. Changes in composting participation and collection practices can also affect the percentage. The team recommends using results to prioritize further investigation, review local conditions, and support targeted outreach while communicating uncertainty and limitations.</p>
+    </section>
+
+    <section id="presentation">
+      <p class="section-kicker">Project presentation</p>
+      <h2>View the team presentation</h2>
+      <p class="lead">The current presentation is available without audio. A recorded version with narration can be added here when it is ready.</p>
+      <div class="note">To display the PowerPoint on this page, first upload the presentation file to your GitHub repository in a folder named <strong>files</strong> with the filename <strong>nyc-recycling-presentation.pptx</strong>. The embedded viewer below will then load it.</div>
+      <div class="presentation-frame" style="margin-top:18px">
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2Fandreabarfield.github.io%2Ffiles%2Fnyc-recycling-presentation.pptx" title="Community Characteristics and Recycling Performance presentation" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="resource-links">
+        <a href="/files/nyc-recycling-presentation.pptx" target="_blank" rel="noopener">Open or download presentation</a>
+      </div>
+    </section>
+
+    <section>
+      <div class="note"><strong>Project takeaway:</strong> Dry recycling collection share varied widely across NYC districts. Median household income was the strongest community characteristic associated with the measure, while prior-year performance was most effective for identifying persistently low-share districts. Forecasting improvements were stronger over the short term than a full year ahead. These findings can support further investigation and targeted outreach, but should not be treated as evidence of individual behavior or causation.</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 Andrea Barfield · Data Science Portfolio</span>
+      <a href="/index.html#projects">Back to projects</a>
+    </div>
+  </footer>
+</body>
+</html>
