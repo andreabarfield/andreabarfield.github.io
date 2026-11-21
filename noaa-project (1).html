@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Collaborative data science project predicting economic damage from U.S. severe weather events using NOAA Storm Events data.">
+  <title>Predicting Economic Damage from U.S. Storm Events | Andrea Barfield</title>
+  <style>
+    :root {
+      --navy: #18213d;
+      --purple: #6545d8;
+      --purple-light: #f0edff;
+      --text: #30374c;
+      --muted: #697186;
+      --border: #e8e7f0;
+      --soft-blue: #eef4fb;
+      --white: #ffffff;
+      --page: #fbfbfd;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+    a { color: var(--purple); }
+    .container { width: min(1050px, calc(100% - 48px)); margin: 0 auto; }
+    .site-header { padding: 24px 0; border-bottom: 1px solid var(--border); background: var(--white); }
+    .navigation { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { color: var(--navy); font-size: 1.1rem; font-weight: 800; letter-spacing: .04em; text-decoration: none; white-space: nowrap; }
+    .nav-links { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: .94rem; font-weight: 600; }
+    .nav-links a:hover { color: var(--purple); }
+    .nav-links .contact-link { color: white; background: var(--purple); padding: 10px 18px; border-radius: 999px; }
+    .nav-links .contact-link:hover { color: white; background: #5134bd; }
+    .hero { padding: 76px 0 64px; background: linear-gradient(135deg, #f4f1ff 0%, #f7f9fd 58%, #eef4fb 100%); }
+    .eyebrow { color: var(--purple); text-transform: uppercase; letter-spacing: .13em; font-size: .76rem; font-weight: 800; margin: 0 0 14px; }
+    h1, h2, h3 { color: var(--navy); line-height: 1.2; }
+    h1 { max-width: 800px; font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -.045em; margin: 0 0 20px; }
+    .hero-copy { max-width: 760px; color: #515b73; font-size: 1.12rem; margin: 0 0 26px; }
+    .project-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 22px; }
+    .pill { display: inline-flex; align-items: center; padding: 7px 13px; border-radius: 999px; background: white; border: 1px solid var(--border); color: var(--text); font-size: .84rem; font-weight: 650; }
+    .pill.team { color: #4f38b7; background: var(--purple-light); border-color: #ded7ff; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .button { display: inline-block; text-decoration: none; font-weight: 700; padding: 12px 19px; border-radius: 999px; border: 1px solid var(--purple); }
+    .button.primary { background: var(--purple); color: white; }
+    .button.secondary { background: white; color: var(--purple); }
+    main { padding: 58px 0 80px; }
+    section { margin: 0 0 58px; }
+    .section-kicker { color: var(--purple); text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; font-weight: 800; margin: 0 0 9px; }
+    h2 { font-size: clamp(1.65rem, 3vw, 2.2rem); margin: 0 0 18px; letter-spacing: -.025em; }
+    h3 { font-size: 1.08rem; margin: 0 0 9px; }
+    p { margin: 0 0 15px; }
+    .lead { max-width: 850px; font-size: 1.08rem; color: #4e5870; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card { background: white; border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: 0 8px 26px rgba(24, 33, 61, .035); }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+    .stat { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+    .stat strong { display: block; color: var(--purple); font-size: 1.7rem; line-height: 1.2; margin-bottom: 7px; }
+    .stat span { color: var(--muted); font-size: .84rem; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+    .tag { background: var(--soft-blue); color: #394761; border-radius: 8px; padding: 7px 11px; font-size: .84rem; font-weight: 650; }
+    .result-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 18px; }
+    .result-table th, .result-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    .result-table th { background: #f5f3ff; color: var(--navy); font-size: .88rem; }
+    .result-table tr:last-child td { border-bottom: 0; }
+    .note { background: #f5f3ff; border-left: 4px solid var(--purple); padding: 18px 20px; border-radius: 0 12px 12px 0; color: #454d65; }
+    .video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; background: #10182c; box-shadow: 0 12px 34px rgba(24,33,61,.12); }
+    .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .resource-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .resource-links a { display: inline-block; padding: 11px 15px; border: 1px solid var(--border); border-radius: 11px; background: white; text-decoration: none; font-weight: 650; }
+    .resource-links a:hover { border-color: var(--purple); }
+    .site-footer { border-top: 1px solid var(--border); padding: 28px 0; background: white; color: var(--muted); font-size: .88rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    @media (max-width: 760px) {
+      .navigation { align-items: flex-start; flex-direction: column; }
+      .nav-links { gap: 16px; }
+      .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 54px 0 48px; }
+    }
+    @media (max-width: 480px) {
+      .container { width: min(100% - 32px, 1050px); }
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: .88rem; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .stat { padding: 15px; }
+      .stat strong { font-size: 1.4rem; }
+      .result-table th, .result-table td { padding: 11px 9px; font-size: .85rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navigation">
+      <a class="brand" href="/index.html">ANDREA BARFIELD</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/index.html">Home</a>
+        <a href="/index.html#projects">Projects</a>
+        <a href="/about.html">About</a>
+        <a class="contact-link" href="/contact.html">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="container">
+      <p class="eyebrow">Data science · Predictive modeling</p>
+      <h1>Predicting Economic Damage from U.S. Storm Events</h1>
+      <p class="hero-copy">Can recorded event characteristics in the NOAA Storm Events Database predict whether a U.S. storm event will result in economic damage? This collaborative project examines events from 2020 through 2025.</p>
+      <div class="project-meta">
+        <span class="pill team">Collaborative team project</span>
+        <span class="pill">DSC 450 · Capstone Project</span>
+        <span class="pill">October 2026</span>
+        <span class="pill">NOAA Storm Events · 2020–2025</span>
+      </div>
+      <div class="hero-actions">
+        <a class="button primary" href="#presentation">Watch presentation</a>
+        <a class="button secondary" href="#results">Explore results</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section>
+      <p class="section-kicker">Project overview</p>
+      <h2>Researching whether storm characteristics predict recorded economic damage</h2>
+      <p class="lead">The project focuses on a specific prediction task: determining whether a storm event has any recorded property or crop damage. The team used NOAA storm-event characteristics available in the dataset to evaluate whether those features contain useful predictive information.</p>
+      <div class="grid" style="margin-top:22px">
+        <article class="card">
+          <h3>Business problem</h3>
+          <p>Economic damage from severe weather is costly and difficult to anticipate. The team investigated whether information NOAA records about a storm event—before its full impact is known—contains a useful signal for predicting recorded damage.</p>
+        </article>
+        <article class="card">
+          <h3>Research question</h3>
+          <p>Can we predict if a weather event will result in economic damage based on the recorded event characteristics in the NOAA Storm Events Database for U.S. storm events from 2020 through 2025?</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-kicker">Data & methodology</p>
+      <h2>From raw storm records to predictive models</h2>
+      <div class="stat-grid">
+        <div class="stat"><strong>410,311</strong><span>Storm-event records in the study period</span></div>
+        <div class="stat"><strong>54 → 12</strong><span>Columns reduced to modeling features</span></div>
+        <div class="stat"><strong>75% / 25%</strong><span>Known vs. unknown economic outcomes (approximately)</span></div>
+        <div class="stat"><strong>2</strong><span>Predictive models compared</span></div>
+      </div>
+      <div class="grid" style="margin-top:20px">
+        <article class="card">
+          <h3>Data source and preparation</h3>
+          <p>The team used 410,311 event records from the NOAA National Centers for Environmental Information Storm Events Database, covering January 1, 2020 through December 31, 2025. Of these, 307,902 had known economic outcomes and 102,409 (24.96%) had unknown damage totals. The original 54 columns were cleaned and reduced to 12 modeling fields.</p>
+          <p>Events with unknown economic outcomes were excluded from modeling rather than being treated as events with zero damage. Among events with known outcomes, 70,299 (22.83%) had recorded damage greater than zero, while 237,603 (77.17%) had recorded $0 damage.</p>
+        </article>
+        <article class="card">
+          <h3>Predictors and target</h3>
+          <p><strong>Predictors:</strong> event type, region, season, and storm duration.</p>
+          <p><strong>Prediction target:</strong> whether an event had any recorded property or crop damage.</p>
+          <p><strong>Models:</strong> Logistic Regression and Random Forest.</p>
+        </article>
+      </div>
+      <div class="note" style="margin-top:20px"><strong>Model validation:</strong> The team split the data by storm episode (EPISODE_ID), rather than by individual row, to reduce leakage from similar records belonging to the same storm system. Average Precision (PR-AUC) was reported alongside ROC-AUC because the positive class represented approximately 23% of events with known outcomes.</div>
+    </section>
+
+    <section id="results">
+      <p class="section-kicker">Results & findings</p>
+      <h2>Both models performed above the no-skill baseline</h2>
+      <p class="lead">Random Forest achieved the strongest overall performance, with a modest improvement over Logistic Regression. The results indicate that the recorded storm characteristics contain useful information for predicting whether an event is associated with economic damage.</p>
+      <table class="result-table">
+        <thead><tr><th>Model</th><th>Average Precision</th><th>ROC-AUC</th></tr></thead>
+        <tbody>
+          <tr><td>No-skill baseline</td><td>0.219</td><td>0.500</td></tr>
+          <tr><td>Logistic Regression</td><td>0.652</td><td>0.871</td></tr>
+          <tr><td><strong>Random Forest</strong></td><td><strong>0.669</strong></td><td><strong>0.880</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="grid" style="margin-top:20px">
+        <article class="card">
+          <h3>What mattered most?</h3>
+          <p>Random Forest feature-importance analysis identified event type as the strongest predictor, followed by region, storm duration, and season. Event type was approximately 2.4 times more important than region in the model.</p>
+        </article>
+        <article class="card">
+          <h3>Additional feature engineering</h3>
+          <p>The team also explored relative intensity, ranking an event against other events of the same type because NOAA measures intensity differently across storm types (for example, hail size versus wind speed). On the subset where this comparison was possible, adding relative intensity increased Average Precision from approximately 0.691 to 0.703. This feature was not applicable to every event type.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-kicker">My role & contributions</p>
+      <h2>Collaborative work with a focus on data wrangling</h2>
+      <div class="card">
+        <p>This was a collaborative team project, and I contributed throughout the project—from preparing the data through the analysis and final presentation. My primary role was data wrangling: collecting, cleaning, and preparing the NOAA storm-event data for analysis. I worked closely with my teammates across the project, contributing to our shared analysis, modeling discussions, interpretation of results, and presentation.</p>
+        <p><strong>Team members:</strong> Matthew Scarpello, Andrea Barfield, and Sarah Parsons.</p>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-kicker">Limitations & next steps</p>
+      <h2>Interpreting the results responsibly</h2>
+      <p>The model identifies patterns in historical recorded outcomes; it does not establish that a storm characteristic causes damage or guarantee the outcome of a future storm. NOAA records include unknown economic outcomes, reporting practices can vary, and property and crop damage estimates do not capture every consequence of severe weather.</p>
+      <p>Future work proposed by the team includes incorporating geographic exposure and vulnerability information, such as FEMA’s National Risk Index, and investigating whether patterns in damage can help predict storm type.</p>
+    </section>
+
+    <section id="presentation">
+      <p class="section-kicker">Project presentation</p>
+      <h2>Watch the team presentation</h2>
+      <p class="lead">The recording includes the team's presentation and audio.</p>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/5h84qbrIn2c" title="Predicting Economic Damage from Severe Weather — team presentation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+      <div class="resource-links">
+        <a href="https://www.youtube.com/watch?v=5h84qbrIn2c" target="_blank" rel="noopener">Open recording on YouTube</a>
+      </div>
+      <p style="margin-top:12px;color:var(--muted);font-size:.88rem">The written report informed this project summary but is not published as a portfolio download.</p>
+    </section>
+
+    <section>
+      <div class="note"><strong>Project takeaway:</strong> Storm frequency alone does not describe economic risk. In this analysis, event type and other recorded storm characteristics helped distinguish events with and without recorded economic damage, while the model's limitations reinforced the importance of using predictive results as decision support—not as a replacement for expert judgment.</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 Andrea Barfield · Data Science Portfolio</span>
+      <a href="/index.html#projects">Back to projects</a>
+    </div>
+  </footer>
+</body>
+</html>
